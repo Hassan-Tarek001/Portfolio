@@ -1,0 +1,326 @@
+/* Animation Variables */
+:root {
+    /* Colors */
+    --neon-primary: #ff6b4a;
+    --neon-secondary: #ff8f6b;
+    --neon-glow: rgba(255, 107, 74, 0.3);
+    --mist-color: rgba(255, 255, 255, 0.03);
+    
+    /* Timings */
+    --t-fast: 200ms;
+    --t-normal: 400ms;
+    --t-slow: 800ms;
+    
+    /* Easings */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out-soft: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* --- Enhanced Color Variables for Animation --- */
+:root {
+    --neon-hue-1: 18;   /* orange */
+    --neon-hue-2: 32;   /* amber */
+    --neon-hue-3: 48;   /* yellow */
+    --neon-hue-4: 300;  /* purple accent */
+    --neon-sat: 98%;
+    --neon-light: 60%;
+    --neon-glow-alpha: 0.35;
+    --neon-glow: hsla(var(--neon-hue-1), var(--neon-sat), var(--neon-light), var(--neon-glow-alpha));
+}
+
+/* Prevent FOUC */
+.js-loading * {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Background Container */
+.background-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    background: var(--color-background);
+}
+
+/* Robotic Hand */
+.robotic-hand {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(400px, 80vw);
+    height: min(500px, 80vh);
+    animation: handFloat 6s var(--ease-in-out-soft) infinite;
+}
+
+.robotic-hand svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.2));
+}
+
+/* Code Symbol Glow */
+.code-symbol {
+    animation: symbolPulse 3s var(--ease-in-out-soft) infinite;
+}
+
+/* Floating Code Characters */
+.code-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.code-particle {
+    position: absolute;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    opacity: 0.1;
+    user-select: none;
+    animation: particleFloat var(--duration, 20s) var(--ease-in-out-soft) infinite;
+    animation-delay: var(--delay, 0s);
+}
+
+/* Mist Effect */
+.mist-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40vh;
+    overflow: hidden;
+    mask-image: linear-gradient(to top,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(to top,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        transparent 100%
+    );
+}
+
+.mist-layer {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        var(--mist-color),
+        transparent 10%
+    );
+    filter: blur(8px);
+    transform: translateX(var(--parallax-offset, 0));
+    will-change: transform;
+}
+
+/* Section Reveal */
+.reveal-section {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    transition:
+        opacity var(--t-slow) var(--ease-out-expo),
+        transform var(--t-slow) var(--ease-out-expo);
+}
+
+.reveal-section.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Text Reveal */
+.text-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        opacity var(--t-normal) var(--ease-out-expo) var(--delay, 0ms),
+        transform var(--t-normal) var(--ease-out-expo) var(--delay, 0ms);
+}
+
+.text-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Navbar Effects */
+.nav {
+    transition:
+        background-color var(--t-normal) var(--ease-out-expo),
+        backdrop-filter var(--t-normal) var(--ease-out-expo),
+        box-shadow var(--t-normal) var(--ease-out-expo);
+}
+
+.nav--scrolled {
+    background-color: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Interactive Elements */
+.interactive {
+    transition:
+        transform var(--t-fast) var(--ease-bounce),
+        box-shadow var(--t-fast) var(--ease-out-expo),
+        background-color var(--t-fast) var(--ease-out-expo);
+}
+
+.interactive:hover {
+    transform: translateY(-2px);
+}
+
+.interactive:active {
+    transform: translateY(1px);
+}
+
+/* Animations */
+@keyframes handFloat {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    25% {
+        transform: translate(-50%, -52%) rotate(2deg);
+    }
+    75% {
+        transform: translate(-50%, -48%) rotate(-2deg);
+    }
+}
+
+@keyframes symbolPulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 10px var(--neon-glow));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 20px var(--neon-glow));
+        transform: scale(1.05);
+    }
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.1;
+    }
+    80% {
+        opacity: 0.1;
+    }
+    100% {
+        transform: translate(
+            var(--translate-x, 100px),
+            var(--translate-y, -100px)
+        ) rotate(var(--rotate, 360deg));
+        opacity: 0;
+    }
+}
+
+/* --- Robotic Hand & Code Symbol Pulse/Glow --- */
+.robotic-hand {
+    filter: drop-shadow(0 0 32px var(--neon-glow));
+    animation: handPulseColor 6s linear infinite;
+}
+
+.robotic-hand #code-symbol text {
+    filter: drop-shadow(0 0 16px var(--neon-glow));
+    animation: codeSymbolPulseColor 3s linear infinite;
+    transition: filter 0.4s var(--ease-in-out-soft);
+}
+
+@keyframes handPulseColor {
+    0%   { filter: drop-shadow(0 0 32px hsla(var(--neon-hue-1), var(--neon-sat), var(--neon-light), var(--neon-glow-alpha))); }
+    25%  { filter: drop-shadow(0 0 40px hsla(var(--neon-hue-2), var(--neon-sat), 70%, 0.45)); }
+    50%  { filter: drop-shadow(0 0 48px hsla(var(--neon-hue-3), var(--neon-sat), 80%, 0.5)); }
+    75%  { filter: drop-shadow(0 0 40px hsla(var(--neon-hue-4), 80%, 70%, 0.4)); }
+    100% { filter: drop-shadow(0 0 32px hsla(var(--neon-hue-1), var(--neon-sat), var(--neon-light), var(--neon-glow-alpha))); }
+}
+
+@keyframes codeSymbolPulseColor {
+    0%   { filter: drop-shadow(0 0 16px hsla(var(--neon-hue-1), var(--neon-sat), 70%, 0.7)); }
+    20%  { filter: drop-shadow(0 0 24px hsla(var(--neon-hue-2), var(--neon-sat), 80%, 0.8)); }
+    50%  { filter: drop-shadow(0 0 32px hsla(var(--neon-hue-3), var(--neon-sat), 90%, 1)); }
+    80%  { filter: drop-shadow(0 0 24px hsla(var(--neon-hue-4), 80%, 70%, 0.7)); }
+    100% { filter: drop-shadow(0 0 16px hsla(var(--neon-hue-1), var(--neon-sat), 70%, 0.7)); }
+}
+
+/* --- Floating Code Particles: Animate Hue --- */
+.code-particle {
+    animation-name: particleFloat, particleHueShift;
+    animation-duration: var(--duration, 20s), 8s;
+    animation-timing-function: var(--ease-in-out-soft), linear;
+    animation-iteration-count: infinite, infinite;
+    animation-delay: var(--delay, 0s), 0s;
+    color: hsl(var(--neon-hue-1), 40%, 70%);
+    filter: drop-shadow(0 0 6px hsla(var(--neon-hue-1), 80%, 70%, 0.2));
+    transition: color 0.4s, filter 0.4s;
+}
+
+@keyframes particleHueShift {
+    0%   { color: hsl(var(--neon-hue-1), 40%, 70%); filter: drop-shadow(0 0 6px hsla(var(--neon-hue-1), 80%, 70%, 0.2)); }
+    25%  { color: hsl(var(--neon-hue-2), 50%, 75%); filter: drop-shadow(0 0 8px hsla(var(--neon-hue-2), 80%, 70%, 0.25)); }
+    50%  { color: hsl(var(--neon-hue-3), 60%, 80%); filter: drop-shadow(0 0 10px hsla(var(--neon-hue-3), 80%, 80%, 0.3)); }
+    75%  { color: hsl(var(--neon-hue-4), 60%, 75%); filter: drop-shadow(0 0 8px hsla(var(--neon-hue-4), 80%, 70%, 0.25)); }
+    100% { color: hsl(var(--neon-hue-1), 40%, 70%); filter: drop-shadow(0 0 6px hsla(var(--neon-hue-1), 80%, 70%, 0.2)); }
+}
+
+/* --- Card Hover Effects --- */
+.card, .project, .skills__category, .achievement, .certification {
+    transition:
+        box-shadow 0.4s var(--ease-out-expo),
+        transform 0.3s var(--ease-bounce),
+        filter 0.4s var(--ease-out-expo);
+}
+
+.card:hover, .project:hover, .skills__category:hover, .achievement:hover, .certification:hover {
+    box-shadow:
+        0 8px 32px 0 hsla(var(--neon-hue-2), 80%, 60%, 0.18),
+        0 2px 8px 0 rgba(0,0,0,0.10);
+    filter: drop-shadow(0 0 12px hsla(var(--neon-hue-2), 80%, 60%, 0.18));
+    transform: scale(1.025);
+}
+
+/* --- Interactive Elements: Color-Shift/Glow --- */
+.interactive {
+    transition:
+        color 0.3s var(--ease-in-out-soft),
+        background-color 0.3s var(--ease-in-out-soft),
+        box-shadow 0.3s var(--ease-in-out-soft),
+        filter 0.3s var(--ease-in-out-soft),
+        border-color 0.3s var(--ease-in-out-soft);
+}
+
+.interactive:hover, .interactive:focus {
+    color: hsl(var(--neon-hue-3), 90%, 70%);
+    background-color: hsla(var(--neon-hue-2), 80%, 60%, 0.08);
+    box-shadow: 0 0 0 2px hsla(var(--neon-hue-3), 80%, 60%, 0.18);
+    filter: drop-shadow(0 0 8px hsla(var(--neon-hue-3), 80%, 70%, 0.18));
+    border-color: hsl(var(--neon-hue-3), 90%, 70%);
+}
+
+.interactive:active {
+    color: hsl(var(--neon-hue-4), 90%, 70%);
+    background-color: hsla(var(--neon-hue-4), 80%, 60%, 0.10);
+    box-shadow: 0 0 0 2px hsla(var(--neon-hue-4), 80%, 60%, 0.18);
+    filter: drop-shadow(0 0 12px hsla(var(--neon-hue-4), 80%, 70%, 0.18));
+    border-color: hsl(var(--neon-hue-4), 90%, 70%);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+} 

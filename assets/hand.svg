@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="500" viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Robotic Hand Base -->
+    <g id="robotic-hand" filter="url(#glow)">
+        <!-- Palm -->
+        <path d="M200 300 L150 400 L250 400 Z" fill="url(#metallic)" stroke="#444" stroke-width="2"/>
+        
+        <!-- Fingers -->
+        <path class="finger" d="M160 280 L140 320 L180 320 Z" fill="url(#metallic)" stroke="#444" stroke-width="2"/>
+        <path class="finger" d="M200 270 L180 310 L220 310 Z" fill="url(#metallic)" stroke="#444" stroke-width="2"/>
+        <path class="finger" d="M240 280 L220 320 L260 320 Z" fill="url(#metallic)" stroke="#444" stroke-width="2"/>
+        
+        <!-- Thumb -->
+        <path class="thumb" d="M150 300 L130 340 L170 340 Z" fill="url(#metallic)" stroke="#444" stroke-width="2"/>
+        
+        <!-- Joints -->
+        <circle cx="160" cy="300" r="5" fill="#333"/>
+        <circle cx="200" cy="290" r="5" fill="#333"/>
+        <circle cx="240" cy="300" r="5" fill="#333"/>
+        <circle cx="150" cy="320" r="5" fill="#333"/>
+    </g>
+
+    <!-- Code Symbol -->
+    <g id="code-symbol" filter="url(#neon-glow)">
+        <text x="180" y="250" font-family="monospace" font-size="40" fill="url(#neon-gradient)">&lt;/&gt;</text>
+    </g>
+
+    <!-- Definitions -->
+    <defs>
+        <!-- Metallic Gradient -->
+        <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#666"/>
+            <stop offset="50%" stop-color="#444"/>
+            <stop offset="100%" stop-color="#333"/>
+        </linearGradient>
+
+        <!-- Neon Gradient -->
+        <linearGradient id="neon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff6b4a"/>
+            <stop offset="100%" stop-color="#ff8f6b"/>
+        </linearGradient>
+
+        <!-- Glow Effects -->
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+
+        <filter id="neon-glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#ff6b4a" flood-opacity="0.5"/>
+        </filter>
+    </defs>
+
+    <!-- Animation Paths -->
+    <path id="hover-path" d="M0,10 Q100,0 200,10 T400,10" opacity="0" fill="none"/>
+</svg> 
