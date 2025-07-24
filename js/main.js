@@ -457,11 +457,12 @@ class AnimationSystem {
             'return', 'async', 'await', 'class', 'import',
             '{', '}', '()', '=>', '[]', '&&', '||'
         ];
+        this.particlePool = [];
+        this.particleCount = 16;
         this.init();
     }
 
     init() {
-        // Wait for resources to load
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.setup());
         } else {
@@ -470,101 +471,84 @@ class AnimationSystem {
     }
 
     setup() {
-        // Remove loading class
         document.documentElement.classList.remove('js-loading');
-        
-        // Create background scene
         this.createBackgroundScene();
-        
-        // Setup scroll animations
         this.setupScrollAnimations();
-        
-        // Setup interactive elements
         this.setupInteractions();
     }
 
     createBackgroundScene() {
         const scene = document.createElement('div');
         scene.className = 'background-scene';
-        
-        // Add robotic hand
         scene.appendChild(this.createRoboticHand());
-        
-        // Add code particles
         scene.appendChild(this.createParticles());
-        
-        // Add mist effect
         scene.appendChild(this.createMistEffect());
-        
         document.body.insertBefore(scene, document.body.firstChild);
     }
 
     createRoboticHand() {
         const hand = document.createElement('div');
         hand.className = 'robotic-hand';
-        
-        // Load SVG
         fetch('assets/hand.svg')
             .then(response => response.text())
             .then(svgContent => {
                 hand.innerHTML = svgContent;
             });
-        
         return hand;
     }
 
     createParticles() {
         const container = document.createElement('div');
         container.className = 'code-particles';
-        
-        // Create initial particles
-        this.addParticles(container, 20);
-        
-        // Continuously add new particles
-        setInterval(() => this.addParticles(container, 1), 1000);
-        
+        // Create a fixed pool of code particles
+        for (let i = 0; i < this.particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'code-particle';
+            container.appendChild(particle);
+            this.particlePool.push(particle);
+        }
+        // Start animation loop
+        this.animateParticles();
         return container;
     }
 
-    addParticles(container, count) {
-        for (let i = 0; i < count; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'code-particle';
-            
-            // Random code snippet
-            particle.textContent = this.codeParticles[
-                Math.floor(Math.random() * this.codeParticles.length)
-            ];
-            
-            // Random position
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.top = `${Math.random() * 100}%`;
-            
-            // Random animation properties
-            particle.style.setProperty('--duration', `${15 + Math.random() * 15}s`);
-            particle.style.setProperty('--delay', `${Math.random() * 5}s`);
-            particle.style.setProperty('--translate-x', `${-200 + Math.random() * 400}px`);
-            particle.style.setProperty('--translate-y', `${-200 + Math.random() * 400}px`);
-            particle.style.setProperty('--rotate', `${-360 + Math.random() * 720}deg`);
-            
-            // Remove particle after animation
-            particle.addEventListener('animationend', () => {
-                particle.remove();
-            });
-            
-            container.appendChild(particle);
-        }
+    animateParticles() {
+        // Animate each particle in the pool
+        this.particlePool.forEach((particle, i) => {
+            this.resetParticle(particle, i);
+        });
+    }
+
+    resetParticle(particle, i) {
+        // Pick a random code word
+        particle.textContent = this.codeParticles[Math.floor(Math.random() * this.codeParticles.length)];
+        // Random position
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        // Random animation properties
+        const duration = 12 + Math.random() * 12;
+        const delay = Math.random() * 4;
+        particle.style.setProperty('--duration', `${duration}s`);
+        particle.style.setProperty('--delay', `${delay}s`);
+        particle.style.setProperty('--translate-x', `${-200 + Math.random() * 400}px`);
+        particle.style.setProperty('--translate-y', `${-200 + Math.random() * 400}px`);
+        particle.style.setProperty('--rotate', `${-360 + Math.random() * 720}deg`);
+        // Restart animation by reflow
+        particle.style.animation = 'none';
+        // Force reflow
+        void particle.offsetWidth;
+        particle.style.animation = '';
+        // Schedule next reset after duration+delay
+        clearTimeout(particle._resetTimeout);
+        particle._resetTimeout = setTimeout(() => this.resetParticle(particle, i), (duration + delay) * 1000);
     }
 
     createMistEffect() {
         const container = document.createElement('div');
         container.className = 'mist-container';
-        
         const layer = document.createElement('div');
         layer.className = 'mist-layer';
         container.appendChild(layer);
-        
-        // Handle parallax scroll
         let ticking = false;
         window.addEventListener('scroll', () => {
             if (!ticking) {
@@ -576,7 +560,6 @@ class AnimationSystem {
                 ticking = true;
             }
         }, { passive: true });
-        
         return container;
     }
 
@@ -596,13 +579,9 @@ class AnimationSystem {
                 rootMargin: '20px'
             }
         );
-
-        // Observe sections
         document.querySelectorAll('.reveal-section').forEach(section => {
             observer.observe(section);
         });
-
-        // Observe text reveals with stagger
         document.querySelectorAll('.text-reveal').forEach((el, index) => {
             el.style.setProperty('--delay', `${index * 100}ms`);
             observer.observe(el);
@@ -610,15 +589,11 @@ class AnimationSystem {
     }
 
     setupInteractions() {
-        // Add interactive class to elements
         document.querySelectorAll('a, button, .card, .project').forEach(el => {
             el.classList.add('interactive');
         });
-
-        // Handle navbar scroll state
         let lastScroll = window.pageYOffset;
         let ticking = false;
-
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
@@ -634,7 +609,6 @@ class AnimationSystem {
     updateNavbar(lastScroll, currentScroll) {
         const navbar = document.querySelector('.nav');
         if (!navbar) return;
-
         if (currentScroll > 100) {
             navbar.classList.add('nav--scrolled');
         } else {

@@ -253,24 +253,30 @@
     100% { filter: drop-shadow(0 0 16px hsla(var(--neon-hue-1), var(--neon-sat), 70%, 0.7)); }
 }
 
-/* --- Floating Code Particles: Animate Hue --- */
+/* --- Floating Code Particles: Vibrant Glow & Color Cycling --- */
 .code-particle {
-    animation-name: particleFloat, particleHueShift;
-    animation-duration: var(--duration, 20s), 8s;
+    animation-name: particleFloat, particleHueCycle;
+    animation-duration: var(--duration, 20s), 10s;
     animation-timing-function: var(--ease-in-out-soft), linear;
     animation-iteration-count: infinite, infinite;
     animation-delay: var(--delay, 0s), 0s;
-    color: hsl(var(--neon-hue-1), 40%, 70%);
-    filter: drop-shadow(0 0 6px hsla(var(--neon-hue-1), 80%, 70%, 0.2));
-    transition: color 0.4s, filter 0.4s;
+    color: hsl(var(--cycle-hue-1), 90%, 75%);
+    filter: blur(0.5px) drop-shadow(0 0 18px hsla(var(--cycle-hue-1), 98%, 70%, 0.35));
+    text-shadow:
+        0 0 8px hsla(var(--cycle-hue-1), 98%, 80%, 0.7),
+        0 0 16px hsla(var(--cycle-hue-2), 98%, 80%, 0.3);
+    opacity: 0.35;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    transition: color 0.4s, filter 0.4s, text-shadow 0.4s;
 }
 
-@keyframes particleHueShift {
-    0%   { color: hsl(var(--neon-hue-1), 40%, 70%); filter: drop-shadow(0 0 6px hsla(var(--neon-hue-1), 80%, 70%, 0.2)); }
-    25%  { color: hsl(var(--neon-hue-2), 50%, 75%); filter: drop-shadow(0 0 8px hsla(var(--neon-hue-2), 80%, 70%, 0.25)); }
-    50%  { color: hsl(var(--neon-hue-3), 60%, 80%); filter: drop-shadow(0 0 10px hsla(var(--neon-hue-3), 80%, 80%, 0.3)); }
-    75%  { color: hsl(var(--neon-hue-4), 60%, 75%); filter: drop-shadow(0 0 8px hsla(var(--neon-hue-4), 80%, 70%, 0.25)); }
-    100% { color: hsl(var(--neon-hue-1), 40%, 70%); filter: drop-shadow(0 0 6px hsla(var(--neon-hue-1), 80%, 70%, 0.2)); }
+@keyframes particleHueCycle {
+    0%   { color: hsl(var(--cycle-hue-1), 90%, 75%); filter: blur(0.5px) drop-shadow(0 0 18px hsla(var(--cycle-hue-1), 98%, 70%, 0.35)); text-shadow: 0 0 8px hsla(var(--cycle-hue-1), 98%, 80%, 0.7), 0 0 16px hsla(var(--cycle-hue-2), 98%, 80%, 0.3); opacity: 0.35; }
+    25%  { color: hsl(var(--cycle-hue-2), 90%, 75%); filter: blur(0.5px) drop-shadow(0 0 18px hsla(var(--cycle-hue-2), 98%, 70%, 0.35)); text-shadow: 0 0 8px hsla(var(--cycle-hue-2), 98%, 80%, 0.7), 0 0 16px hsla(var(--cycle-hue-3), 98%, 80%, 0.3); opacity: 0.35; }
+    50%  { color: hsl(var(--cycle-hue-3), 90%, 75%); filter: blur(0.5px) drop-shadow(0 0 18px hsla(var(--cycle-hue-3), 98%, 70%, 0.35)); text-shadow: 0 0 8px hsla(var(--cycle-hue-3), 98%, 80%, 0.7), 0 0 16px hsla(var(--cycle-hue-4), 98%, 80%, 0.3); opacity: 0.35; }
+    75%  { color: hsl(var(--cycle-hue-4), 90%, 75%); filter: blur(0.5px) drop-shadow(0 0 18px hsla(var(--cycle-hue-4), 98%, 70%, 0.35)); text-shadow: 0 0 8px hsla(var(--cycle-hue-4), 98%, 80%, 0.7), 0 0 16px hsla(var(--cycle-hue-1), 98%, 80%, 0.3); opacity: 0.35; }
+    100% { color: hsl(var(--cycle-hue-1), 90%, 75%); filter: blur(0.5px) drop-shadow(0 0 18px hsla(var(--cycle-hue-1), 98%, 70%, 0.35)); text-shadow: 0 0 8px hsla(var(--cycle-hue-1), 98%, 80%, 0.7), 0 0 16px hsla(var(--cycle-hue-2), 98%, 80%, 0.3); opacity: 0.35; }
 }
 
 /* --- Card Hover Effects --- */
@@ -313,6 +319,23 @@
     box-shadow: 0 0 0 2px hsla(var(--neon-hue-4), 80%, 60%, 0.18);
     filter: drop-shadow(0 0 12px hsla(var(--neon-hue-4), 80%, 70%, 0.18));
     border-color: hsl(var(--neon-hue-4), 90%, 70%);
+}
+
+/* Timeline Card Animations */
+.timeline__item, .timeline__content {
+    transition:
+        transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, box-shadow, filter;
+}
+
+.timeline__item:hover .timeline__content,
+.timeline__content:hover {
+    transform: scale(1.035) translateY(-4px) rotate(-1deg);
+    box-shadow: 0 8px 32px 0 hsla(var(--cycle-hue-2, 32), 80%, 60%, 0.18), 0 2px 8px 0 rgba(0,0,0,0.10);
+    filter: drop-shadow(0 0 12px hsla(var(--cycle-hue-2, 80%, 60%, 0.18)));
+    z-index: 2;
 }
 
 /* Reduced Motion */
